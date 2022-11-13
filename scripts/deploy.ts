@@ -1,6 +1,6 @@
-const ethers = require('ethers');
-const fs = require('fs-extra');
-require('dotenv').config();
+import { ethers } from 'ethers';
+import * as fs from 'fs-extra';
+import 'dotenv/config';
 
 async function main() {
   // connect to ganache instance
@@ -9,7 +9,7 @@ async function main() {
   );
   // connect to the wallet with the private key from an account on ganache
   const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8');
-  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
   // let wallet = new ethers.Wallet.fromEncryptedJsonSync(
   //   encryptedJson,
   //   process.env.PRIVATE_KEY_PASSWORD
@@ -39,9 +39,9 @@ async function main() {
   console.log(`Updated Favorite Number: ${updatedFavoriteNumber.toString()}`);
 }
 
-main().then(() =>
-  process.exit().catch((err) => {
-    console.error(err);
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.log(error);
     process.exit(1);
-  })
-);
+  });
