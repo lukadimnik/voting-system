@@ -1,16 +1,12 @@
 const ethers = require('ethers');
 const fs = require('fs-extra');
+require('dotenv').config();
 
 async function main() {
   // connect to ganache instance
-  const provider = new ethers.providers.JsonRpcProvider(
-    'HTTP://127.0.0.1:7545'
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
   // connect to the wallet with the private key from an account on ganache
-  const wallet = new ethers.Wallet(
-    '9a87bdc4b8f39a1c438e32f1c01431527a38f2cbaf2ef400e10ae4b88f3e96d3',
-    provider
-  );
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   const abi = fs.readFileSync(
     './compiled-contracts/contracts_SimleStorage_sol_SimpleStorage.abi',
     'utf-8'
