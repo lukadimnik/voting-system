@@ -1,5 +1,4 @@
 import { ethers, run, network } from 'hardhat';
-import '@nomiclabs/hardhat-etherscan';
 
 async function main() {
   // const currentTimestampInSeconds = Math.round(Date.now() / 1000);
@@ -19,10 +18,20 @@ async function main() {
   await simpleStorage.deployed();
   console.log(`Deployed contract to: ${simpleStorage.address}`);
   console.log(network.config);
-  if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
+  if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
+    console.log('Waiting for block confirmations');
     await simpleStorage.deployTransaction.wait(6);
     await verify(simpleStorage.address, []);
   }
+
+  const currentValue = await simpleStorage.retrieve();
+  console.log(`Current value is: ${currentValue}`);
+
+  // update current value
+  const transactionResponse = await simpleStorage.store(8);
+  await transactionResponse.wait(1);
+  const updatedValue = await simpleStorage.retrieve();
+  console.log(`Updated value is: ${updatedValue}`);
 }
 
 async function verify(contractAddress: string, args: any) {
