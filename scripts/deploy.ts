@@ -1,4 +1,5 @@
-import { ethers } from 'hardhat';
+import { ethers, run, network } from 'hardhat';
+import '@nomiclabs/hardhat-etherscan';
 
 async function main() {
   // const currentTimestampInSeconds = Math.round(Date.now() / 1000);
@@ -17,6 +18,25 @@ async function main() {
   const simpleStorage = await SimpleStorageFactory.deploy();
   await simpleStorage.deployed();
   console.log(`Deployed contract to: ${simpleStorage.address}`);
+  console.log(network.config);
+  if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
+    await simpleStorage.deployTransaction.wait(6);
+    await verify(simpleStorage.address, []);
+  }
+}
+
+async function verify(contractAddress: string, args: any) {
+  console.log('Verifying contract...');
+  try {
+    await run('verify:verify', {
+      address: contractAddress,
+      constructorArguments: args,
+    });
+  } catch (error: any) {
+    if (error.message.toLowerCase().includes('already verified')) {
+      console.log('Already verified!');
+    }
+  }
 }
 
 main()
