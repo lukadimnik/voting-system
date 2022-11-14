@@ -3,6 +3,7 @@ import '@nomicfoundation/hardhat-toolbox';
 import 'dotenv/config';
 import './tasks/block-number';
 import('hardhat-gas-reporter');
+import 'solidity-coverage';
 
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || 'https://eth-goerli';
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '0xkey';
