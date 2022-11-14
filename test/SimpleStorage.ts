@@ -1,9 +1,10 @@
 import { ethers } from 'hardhat';
-import { expect, assert } from 'chai';
+import { assert } from 'chai';
+import { SimpleStorage, SimpleStorage__factory } from '../typechain-types';
 
 describe('SimpleStorage', () => {
-  let simpleStorageFactory;
-  let simpleStorage: any;
+  let simpleStorageFactory: SimpleStorage__factory;
+  let simpleStorage: SimpleStorage;
 
   beforeEach(async () => {
     simpleStorageFactory = await ethers.getContractFactory('SimpleStorage');
@@ -11,7 +12,7 @@ describe('SimpleStorage', () => {
   });
 
   it('should start with a favorite number of 0', async () => {
-    const currentValue = (await simpleStorage.retrieve()) as string;
+    const currentValue = await simpleStorage.retrieve();
     const expectedValue = '0';
     assert.equal(currentValue.toString(), expectedValue);
   });

@@ -34,7 +34,7 @@ async function main() {
   console.log(`Updated value is: ${updatedValue}`);
 }
 
-async function verify(contractAddress: string, args: any) {
+async function verify(contractAddress: string, args: any[]) {
   console.log('Verifying contract...');
   try {
     await run('verify:verify', {
