@@ -5,6 +5,7 @@ import './tasks/block-number';
 import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import '@nomiclabs/hardhat-solhint';
+import 'hardhat-deploy';
 
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || 'https://eth-goerli';
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '0xkey';
@@ -34,6 +35,14 @@ const config: HardhatUserConfig = {
     noColors: true,
     currency: 'USD',
     coinmarketcap: COINMARKETCAP_API_KEY,
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    user: {
+      default: 1,
+    },
   },
 };
 
