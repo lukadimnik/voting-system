@@ -9,6 +9,7 @@
   "author": "Luka Dimnik",
   "license": "ISC",
   "dependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
     "@types/fs-extra": "^9.0.13",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
