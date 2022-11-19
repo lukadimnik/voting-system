@@ -1,12 +1,13 @@
 import { ethers, getNamedAccounts } from 'hardhat';
-import { BasicNft } from '../typechain-types/contracts/BasicNFT.sol/BasicNft';
+import { Lock } from '../typechain-types/contracts/Lock';
 
 async function main() {
   const { deployer } = await getNamedAccounts();
-  const basicNft: BasicNft = await ethers.getContract('BasicNft', deployer);
+  const lock: Lock = await ethers.getContract('Lock', deployer);
 
-  console.log('Minting...');
-  const transactionResponse = await basicNft.getTokenCounter();
+  console.log('Withdrawing...');
+  const transactionResponse = await lock.withdraw();
+  await transactionResponse.wait(1);
   console.log('transactionResponse: ', transactionResponse);
 }
 
