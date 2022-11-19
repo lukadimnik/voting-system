@@ -53,7 +53,7 @@ export const networkConfig: networkConfigInfo = {
     vrfCoordinator: '0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D',
     oracle: '0xCC79157eb46F5624204f47AB42b3906cAA40eaB7',
     jobId: 'ca98366cc7314957b8c012c72f05aeeb',
-    fee: '100000000000000000',
+    // fee: '100000000000000000',
     fundAmount: BigNumber.from('100000000000000000'),
     keepersUpdateInterval: '30',
   },
