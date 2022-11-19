@@ -6,8 +6,12 @@ async function main() {
   const basicNft: BasicNft = await ethers.getContract('BasicNft', deployer);
 
   console.log('Minting...');
-  const transactionResponse = await basicNft.getTokenCounter();
-  console.log('transactionResponse: ', transactionResponse);
+  const transactionRes = await basicNft.mintNft();
+  await transactionRes.wait(1);
+  console.log('transactionRes: ', transactionRes);
+
+  const tokenCounterRes = await basicNft.getTokenCounter();
+  console.log('transactionResponse: ', tokenCounterRes.toNumber());
 }
 
 main()
