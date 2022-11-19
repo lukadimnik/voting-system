@@ -12,6 +12,9 @@ async function main() {
 
   const tokenCounterRes = await basicNft.getTokenCounter();
   console.log('transactionResponse: ', tokenCounterRes.toNumber());
+
+  console.log('tokoen uri: ', await basicNft.tokenURI(1));
+  console.log('tokoen uri: ', await basicNft.TOKEN_URI());
 }
 
 main()
