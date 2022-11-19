@@ -5,9 +5,9 @@ import {
 import verify from '../utils/verify';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { BasicNft } from '../typechain-types/contracts/BasicNFT.sol/BasicNft';
+import { Lock } from '../typechain-types/contracts/Lock';
 
-const deployBasicNft: DeployFunction = async function (
+const deployLock: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
   // @ts-ignore
@@ -17,10 +17,16 @@ const deployBasicNft: DeployFunction = async function (
   const waitBlockConfirmations = developmentChains.includes(network.name)
     ? 1
     : VERIFICATION_BLOCK_CONFIRMATIONS;
+  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
+  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
+  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const lockedAmount = ethers.utils.parseEther('1');
+  //   const Lock = await ethers.getContractFactory('Lock');
+  //   const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
 
   log('----------------------------------------------------');
-  const args: any[] = [];
-  const basicNft: BasicNft = await deploy('BasicNft', {
+  const args: any[] = [unlockTime];
+  const basicNft: Lock = await deploy('Lock', {
     from: deployer,
     args: args,
     log: true,
@@ -37,5 +43,5 @@ const deployBasicNft: DeployFunction = async function (
   }
 };
 
-export default deployBasicNft;
-deployBasicNft.tags = ['all', 'basicnft', 'main'];
+export default deployLock;
+deployLock.tags = ['all', 'lock', 'main'];
