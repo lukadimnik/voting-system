@@ -4,7 +4,12 @@
   "description": "Voting system application that is part of my thesis project.",
   "main": "index.js",
   "scripts": {
-    "compile": "solcjs --bin --abi --include-path node_modules/ --base-path . -o ./compiled-contracts contracts/SimpleStorage.sol"
+    "compile": "solcjs --bin --abi --include-path node_modules/ --base-path . -o ./compiled-contracts contracts/SimpleStorage.sol",
+    "test": "npx hardhat test",
+    "lint": "solhint 'contracts/*.sol'",
+    "lint:fix": "solhint 'contracts/*.sol' --fix",
+    "format": "prettier --write .",
+    "coverage": "npx hardhat coverage"
   },
   "author": "Luka Dimnik",
   "license": "ISC",
