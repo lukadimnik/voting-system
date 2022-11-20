@@ -3,6 +3,7 @@ import {
   VERIFICATION_BLOCK_CONFIRMATIONS,
 } from '../helper-hardhat-config';
 import verify from '../utils/verify';
+import { stringArrtoByte32Arr } from '../utils/toByte32';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { BasicNft } from '../typechain-types/contracts/BasicNFT.sol/BasicNft';
@@ -30,7 +31,10 @@ const deployBasicNft: DeployFunction = async function (
   });
   log('----------------------------------------------------');
   log('Deploying Ballot contract...');
-  const ballotArgs: any[] = [basicNft.address];
+  const ballotArgs: any[] = [
+    await stringArrtoByte32Arr(['John', 'Fred']),
+    basicNft.address,
+  ];
   const ballot: Ballot = await deploy('Ballot', {
     from: deployer,
     args: ballotArgs,

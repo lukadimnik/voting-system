@@ -33,7 +33,7 @@ contract Ballot {
   Proposal[] public proposals;
 
   /// Create a new ballot to choose one of `proposalNames`.
-  constructor(address _nftContractAddress) {
+  constructor(bytes32[] memory proposalNames, address _nftContractAddress) {
     nftContractAddress = _nftContractAddress;
     chairperson = msg.sender;
     voters[chairperson].weight = 1;
@@ -41,6 +41,12 @@ contract Ballot {
     // For each of the provided proposal names,
     // create a new proposal object and add it
     // to the end of the array.
+    for (uint256 i = 0; i < proposalNames.length; i++) {
+      // 'Proposal({...})' creates a temporary
+      // Proposal object and 'proposals.push(...)'
+      // appends it to the end of 'proposals'.
+      proposals.push(Proposal({name: proposalNames[i], voteCount: 0}));
+    }
   }
 
   // Give `voter` the right to vote on this ballot.
@@ -63,51 +69,6 @@ contract Ballot {
     require(!voters[voter].voted, 'The voter already voted.');
     require(voters[voter].weight == 0);
     voters[voter].weight = 1;
-  }
-
-  /// Delegate your vote to the voter `to`.
-  function delegate(address to) external {
-    // assigns reference
-    Voter storage sender = voters[msg.sender];
-    require(sender.weight != 0, 'You have no right to vote');
-    require(!sender.voted, 'You already voted.');
-
-    require(to != msg.sender, 'Self-delegation is disallowed.');
-
-    // Forward the delegation as long as
-    // `to` also delegated.
-    // In general, such loops are very dangerous,
-    // because if they run too long, they might
-    // need more gas than is available in a block.
-    // In this case, the delegation will not be executed,
-    // but in other situations, such loops might
-    // cause a contract to get "stuck" completely.
-    while (voters[to].delegate != address(0)) {
-      to = voters[to].delegate;
-
-      // We found a loop in the delegation, not allowed.
-      require(to != msg.sender, 'Found loop in delegation.');
-    }
-
-    Voter storage delegate_ = voters[to];
-
-    // Voters cannot delegate to accounts that cannot vote.
-    require(delegate_.weight >= 1);
-
-    // Since `sender` is a reference, this
-    // modifies `voters[msg.sender]`.
-    sender.voted = true;
-    sender.delegate = to;
-
-    if (delegate_.voted) {
-      // If the delegate already voted,
-      // directly add to the number of votes
-      proposals[delegate_.vote].voteCount += sender.weight;
-    } else {
-      // If the delegate did not vote yet,
-      // add to her weight.
-      delegate_.weight += sender.weight;
-    }
   }
 
   /// Give your vote (including votes delegated to you)
