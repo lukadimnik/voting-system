@@ -7,14 +7,16 @@ async function main() {
 
   console.log('Minting...');
   const transactionRes = await basicNft.mintNft();
+  console.log('------');
   await transactionRes.wait(1);
   console.log('transactionRes: ', transactionRes);
 
   const tokenCounterRes = await basicNft.getTokenCounter();
   console.log('transactionResponse: ', tokenCounterRes.toNumber());
 
-  console.log('tokoen uri: ', await basicNft.tokenURI(1));
+  console.log('tokoen uri: ', await basicNft.tokenURI(0));
   console.log('tokoen uri: ', await basicNft.TOKEN_URI());
+  console.log('owner of: ', await basicNft.ownerOf(0));
 }
 
 main()
