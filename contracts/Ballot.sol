@@ -148,16 +148,11 @@ contract Ballot {
     winnerName_ = proposals[winningProposal()].name;
   }
 
-  // // will check if the caller has the right to vote
-  // function blah() public view returns (bool) {
-  //   return walletHoldsToken();
-  // }
+  // will check if the caller has the right to vote
+  function walletHoldsToken() public view returns (bool) {
+    console.log('msg.sender: ', msg.sender);
+    console.log('nftContractAddress: ', nftContractAddress);
 
-  // // will check if the caller has the right to vote
-  // function walletHoldsToken() public view returns (bool) {
-  //   console.log('msg.sender: ', msg.sender);
-  //   console.log('nftContractAddress: ', nftContractAddress);
-
-  //   return IERC721(nftContractAddress).balanceOf(msg.sender) > 0;
-  // }
+    return IERC721(nftContractAddress).balanceOf(msg.sender) > 0;
+  }
 }
