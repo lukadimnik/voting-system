@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
+import '@openzeppelin/contracts/interfaces/IERC721.sol';
+import 'hardhat/console.sol';
+
 /// @title Voting with delegation.
 contract Ballot {
   // This declares a new complex type which will
@@ -20,6 +23,7 @@ contract Ballot {
   }
 
   address public chairperson;
+  address nftContractAddress;
 
   // This declares a state variable that
   // stores a `Voter` struct for each possible address.
@@ -29,19 +33,14 @@ contract Ballot {
   Proposal[] public proposals;
 
   /// Create a new ballot to choose one of `proposalNames`.
-  constructor(bytes32[] memory proposalNames) {
+  constructor(address _nftContractAddress) {
+    nftContractAddress = _nftContractAddress;
     chairperson = msg.sender;
     voters[chairperson].weight = 1;
 
     // For each of the provided proposal names,
     // create a new proposal object and add it
     // to the end of the array.
-    for (uint256 i = 0; i < proposalNames.length; i++) {
-      // `Proposal({...})` creates a temporary
-      // Proposal object and `proposals.push(...)`
-      // appends it to the end of `proposals`.
-      proposals.push(Proposal({name: proposalNames[i], voteCount: 0}));
-    }
   }
 
   // Give `voter` the right to vote on this ballot.
@@ -115,6 +114,10 @@ contract Ballot {
   /// to proposal `proposals[proposal].name`.
   function vote(uint256 proposal) external {
     Voter storage sender = voters[msg.sender];
+    require(
+      IERC721(nftContractAddress).balanceOf(msg.sender) > 0,
+      'Has no right to vote'
+    );
     require(sender.weight != 0, 'Has no right to vote');
     require(!sender.voted, 'Already voted.');
     sender.voted = true;
@@ -144,4 +147,17 @@ contract Ballot {
   function winnerName() external view returns (bytes32 winnerName_) {
     winnerName_ = proposals[winningProposal()].name;
   }
+
+  // // will check if the caller has the right to vote
+  // function blah() public view returns (bool) {
+  //   return walletHoldsToken();
+  // }
+
+  // // will check if the caller has the right to vote
+  // function walletHoldsToken() public view returns (bool) {
+  //   console.log('msg.sender: ', msg.sender);
+  //   console.log('nftContractAddress: ', nftContractAddress);
+
+  //   return IERC721(nftContractAddress).balanceOf(msg.sender) > 0;
+  // }
 }
