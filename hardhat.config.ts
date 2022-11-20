@@ -40,8 +40,17 @@ const config: HardhatUserConfig = {
     deployer: {
       default: 0,
     },
-    user: {
+    user1: {
       default: 1,
+    },
+    user2: {
+      default: 2,
+    },
+    user3: {
+      default: 3,
+    },
+    user4: {
+      default: 4,
     },
   },
 };
