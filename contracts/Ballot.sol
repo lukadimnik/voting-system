@@ -12,7 +12,6 @@ contract Ballot {
   struct Voter {
     uint256 weight; // weight is accumulated by delegation
     bool voted; // if true, that person already voted
-    address delegate; // person delegated to
     uint256 vote; // index of the voted proposal
   }
 
@@ -49,38 +48,16 @@ contract Ballot {
     }
   }
 
-  // Give `voter` the right to vote on this ballot.
-  // May only be called by `chairperson`.
-  function giveRightToVote(address voter) external {
-    // If the first argument of `require` evaluates
-    // to `false`, execution terminates and all
-    // changes to the state and to Ether balances
-    // are reverted.
-    // This used to consume all gas in old EVM versions, but
-    // not anymore.
-    // It is often a good idea to use `require` to check if
-    // functions are called correctly.
-    // As a second argument, you can also provide an
-    // explanation about what went wrong.
-    require(
-      msg.sender == chairperson,
-      'Only chairperson can give right to vote.'
-    );
-    require(!voters[voter].voted, 'The voter already voted.');
-    require(voters[voter].weight == 0);
-    voters[voter].weight = 1;
-  }
-
   /// Give your vote (including votes delegated to you)
   /// to proposal `proposals[proposal].name`.
   function vote(uint256 proposal) external {
-    Voter storage sender = voters[msg.sender];
     require(
       IERC721(nftContractAddress).balanceOf(msg.sender) > 0,
-      'Has no right to vote'
+      'Does not hold the right access NFT'
     );
-    require(sender.weight != 0, 'Has no right to vote');
-    require(!sender.voted, 'Already voted.');
+    require(!voters[msg.sender].voted, 'The voter already voted.');
+    voters[msg.sender].weight = 1;
+    Voter storage sender = voters[msg.sender];
     sender.voted = true;
     sender.vote = proposal;
 
