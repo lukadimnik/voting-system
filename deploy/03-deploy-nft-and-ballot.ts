@@ -9,7 +9,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { BasicNft } from '../typechain-types/contracts/BasicNFT.sol/BasicNft';
 import { Ballot } from '../typechain-types/contracts/Ballot';
 
-const deployBasicNft: DeployFunction = async function (
+const deployNftAndBallot: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
   // @ts-ignore
@@ -42,7 +42,7 @@ const deployBasicNft: DeployFunction = async function (
     waitConfirmations: waitBlockConfirmations || 1,
   });
 
-  // Verify the deployment if not run on local network
+  // Verify the deployment if not in dev environment
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
@@ -54,5 +54,5 @@ const deployBasicNft: DeployFunction = async function (
   }
 };
 
-export default deployBasicNft;
-deployBasicNft.tags = ['all', 'nftandballot', 'main'];
+export default deployNftAndBallot;
+deployNftAndBallot.tags = ['all', 'nftandballot', 'main'];
