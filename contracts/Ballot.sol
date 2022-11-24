@@ -7,13 +7,13 @@ import '@openzeppelin/contracts/interfaces/IERC721.sol';
 /// @title Voting system.
 contract Ballot {
   struct Voter {
-    bool voted; // if true, that person already voted
-    uint256 vote; // index of the voted proposal
+    bool voted;
+    uint256 vote;
   }
 
   struct Proposal {
-    bytes32 name; // short name (up to 32 bytes)
-    uint256 voteCount; // number of accumulated votes
+    bytes32 name;
+    uint256 voteCount;
   }
 
   address nftContractAddress;
@@ -43,8 +43,6 @@ contract Ballot {
     proposals[proposal].voteCount += 1;
   }
 
-  /// @dev Computes the winning proposal taking all
-  /// previous votes into account.
   function winningProposal() public view returns (uint256 winningProposal_) {
     uint256 winningVoteCount = 0;
     for (uint256 p = 0; p < proposals.length; p++) {
